@@ -1,0 +1,57 @@
+pipeline {
+	agent any
+	environment {
+		myrepo='petclinic.git'
+	}
+	tools {
+		maven 'm3.6'
+	}
+	 parameters
+	 { string(name: 'MVN_OPTION', defaultValue: 'package', description: '') }
+		{
+	stages {
+		
+		stage('build'){
+			steps {
+				sh "mvn clean $MVN_OPTION"
+			}
+		}
+		stage('test results'){ 
+			steps {
+				junit 'target/surefire-reports/*.xml'
+			}
+		}
+		stage('archive actifacts'){
+			steps {
+				archiveArtifacts artifacts: 'target/*.?ar', followSymlinks: false
+			}
+		}	
+	}
+	post { 
+			success {
+				notify('Success')
+			}
+			failure {
+				notify('Failed')
+			}
+		}
+	}
+	
+notify('completed')
+def notify (status) {
+emailext body: "jenkins ${status}", subject: 'jenkins project', to: 'chilkurisasender@gmail.com'
+}	
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
