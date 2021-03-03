@@ -8,7 +8,7 @@ pipeline {
 	}
 	 parameters
 	 { string(name: 'MVN_OPTION', defaultValue: 'package', description: '') }
-		{
+		
 	stages {
 		
 		stage('build'){
